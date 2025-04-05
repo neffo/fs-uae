@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import sys
+import platform
 from typing import Dict, List, Set
 
 strip = False
@@ -18,6 +19,16 @@ steam_runtime = False
 excluded_libraries: Dict[str, Set[str]] = {}
 included_libraries: Dict[str, Set[str]] = {}
 
+def is_x86_family() -> bool:
+    return platform.machine().lower() in [
+        "x86_64",
+        "x86-64",
+        "amd64",
+        "i386",
+        "i486",
+        "i586",
+        "i686",
+    ]
 
 def fix_linux_binary(path: str):
     changes = 0
@@ -130,7 +141,7 @@ manylinux2014_whitelist = set(
 
 
 def ignore_linux_library(name: str):
-    if os.getenv("LIBGPG_ERROR_CHECK", "") != "0":
+    if os.getenv("LIBGPG_ERROR_CHECK", "") != "0" and is_x86_family():
         if name.startswith("libgpg-error.so"):
             raise Exception(
                 "Bundling libgpg-error (libgcrypt?) breaks Intel GL driver"
