@@ -11,7 +11,11 @@ esac
 case "`uname -m`" in
     x86_64*)  SYSTEM_ARCH=x86-64;;
     arm64*)   SYSTEM_ARCH=ARM64;;
-    armv7l*)  SYSTEM_ARCH=ARM;;
+    aarch64*)   SYSTEM_ARCH=ARM64;;
+    armv6*)  SYSTEM_ARCH=ARM32;;
+    armv7*)  SYSTEM_ARCH=ARM32;;
+    armv7l*)  SYSTEM_ARCH=ARM32;;
+    armv8*)  SYSTEM_ARCH=ARM32;;
     *)        SYSTEM_ARCH=Unknown;;
 esac
 

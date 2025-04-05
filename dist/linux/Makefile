@@ -1,6 +1,7 @@
-version = 4.0.2-dev
+version = not used
 
 all:
+	cd ../.. && fsbuild/version
 	./build.py $(version)
 
 clean:
