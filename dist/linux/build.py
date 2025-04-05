@@ -14,7 +14,7 @@ with open("../../PACKAGE.FS", "r") as f:
             pass
 
 version = package["PACKAGE_VERSION"]
-arch = os.environ["SYSTEM_ARCH"]
+arch = package["SYSTEM_ARCH"]
 
 # if os.environ.get("STEAMOS", ""):
 #     os_name = "steamos"
@@ -22,7 +22,7 @@ arch = os.environ["SYSTEM_ARCH"]
 os_name = "linux"
 os_name_pretty = "Linux"
 
-version = sys.argv[1]
+# version = sys.argv[1]
 # package_name = "fs-uae_{0}_{1}_{2}".format(version, os_name, arch)
 package_name_2 = "FS-UAE_{0}_{1}_{2}".format(version, os_name_pretty, arch)
 package_dir = "../{}/FS-UAE/{}/{}".format(os_name, os_name_pretty, arch)

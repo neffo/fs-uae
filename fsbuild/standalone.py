@@ -145,7 +145,9 @@ def ignore_linux_library(name: str):
         return True
     if name.startswith("ld-linux-x86-64.so"):
         return True
-    if name.startswith("ld-linux-armhf.so.3"):
+    if name.startswith("ld-linux-armhf.so"):
+        return True
+    if name.startswith("ld-linux-aarch64.so"):
         return True
 
     # Bundling the C library is a no-no (causes issues)
