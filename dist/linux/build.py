@@ -3,15 +3,19 @@ import os
 import sys
 import platform
 import subprocess
+from .. import arch as get_arch
 
-p = subprocess.Popen(["file", "-L", "/bin/sh"], stdout=subprocess.PIPE)
-exe_info = p.stdout.read().decode("UTF-8")
-if "386" in exe_info:
-    arch = "x86"
-elif "x86-64" in exe_info:
-    arch = "x86-64"
-else:
-    raise Exception("unrecognized arch " + repr(exe_info))
+package = {}
+with open("../../PACKAGE.FS", "r") as f:
+    for line in f:
+        try:
+            key, value = line.strip().split("=", 1)
+            package[key] = value
+        except ValueError:
+            pass
+
+version = package["PACKAGE_VERSION"]
+arch = get_arch.get_arch()
 
 if os.environ.get("STEAMOS", ""):
     os_name = "steamos"
@@ -19,7 +23,6 @@ else:
     os_name = "linux"
     os_name_pretty = "Linux"
 
-version = sys.argv[1]
 package_name = "fs-uae_{0}_{1}_{2}".format(version, os_name, arch)
 package_name_2 = "FS-UAE_{0}_{1}_{2}".format(version, os_name_pretty, arch)
 package_dir = "../{}/FS-UAE/{}/{}".format(os_name, os_name_pretty, arch)
@@ -98,7 +101,13 @@ s("cp -a ../../share/locale/* FS-UAE/Locale")
 
 s("cp -a ../../licenses FS-UAE/Licenses")
 s("cp -a ../../README FS-UAE/ReadMe.txt")
-s("./standalone-linux.py --strip --rpath='$ORIGIN' {package_dir}")
+
+if os.environ.get("STANDALONE") == "0":
+    pass
+else:
+    # s("./standalone-linux.py --strip --rpath='$ORIGIN' {package_dir}")
+    s("cd ../.. && python3 fsbuild/standalone.py --strip --rpath='$ORIGIN' dist/linux/{package_dir}")
+
 s("find {package_dir} -name '*.standalone' -delete")
 s("echo {version} > FS-UAE/Version.txt")
 s("echo {version} > {package_dir}/Version.txt")
@@ -107,7 +116,9 @@ if os_name == "steamos":
     wrap("fs-uae")
     wrap("fs-uae-device-helper")
 
-if os.environ.get("PACKAGE", "") != "0":
+if os.environ.get("PACKAGE", "") == "0":
+    pass
+else:
     # s("cd {package_dir} && tar Jcfv ../../../{package_name}.tar.xz *")
     s("tar Jcfv ../../{package_name}.tar.xz FS-UAE")
     print(package_name)

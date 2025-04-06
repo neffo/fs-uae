@@ -1,6 +1,7 @@
 version = @PACKAGE_VERSION@
 
 all:
+	cd ../.. && fsbuild/version
 	./build.py $(version)
 
 clean:
