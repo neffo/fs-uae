@@ -24,6 +24,7 @@ Install dependencies for running bootstrap:
 Run bootstrap (only when building from git repo):
 
     ./bootstrap
+    fsbuild/version
 
 Install dependencies for building FS-UAE:
 
